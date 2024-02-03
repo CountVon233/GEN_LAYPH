@@ -1,0 +1,8 @@
+ vfile input 
+ initial variables 
+ efile input 
+ set bound node 
+count short cuts
+number of threads is 24
+ set valid commuinty 
+output vertex with valid comm 
