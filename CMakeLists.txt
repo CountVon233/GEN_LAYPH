@@ -10,10 +10,14 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenMP REQUIRED)
 
+# add_executable(run_genlayph src/genlayph-new.cpp)
 add_executable(run_genlayph src/genlayph.cpp)
 add_executable(run_testpr src/test-pagerank.cpp)
 add_executable(run_statistics src/statistics.cpp)
+# add_executable(run_filter_louvain src/pre-filter-comm-new.cpp)
 add_executable(run_filter_louvain src/pre-filter-comm.cpp)
+add_executable(run_test src/test.cpp)
 
 target_link_libraries(run_genlayph PRIVATE OpenMP::OpenMP_CXX)
 target_link_libraries(run_filter_louvain PRIVATE OpenMP::OpenMP_CXX)
+target_link_libraries(run_test PRIVATE OpenMP::OpenMP_CXX)

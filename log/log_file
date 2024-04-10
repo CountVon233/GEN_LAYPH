@@ -4,7 +4,7 @@
  set bound node 
  assign inital edges (up graph edges and inner edges) 
 compute short cuts
-number of threads is 24
+number of threads is 20
 output low graph
 output up graph
 output assign graph

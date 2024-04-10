@@ -9,6 +9,9 @@
 #include <omp.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 using vid_t = int64_t;
 using weight_t = double;
@@ -49,12 +52,14 @@ void Init(){
 
 int main(){
     
-    std::ofstream logfile("/workspaces/gen_layph/log/preprocess_log");
+    std::ofstream logfile("/workspaces/GEN_LAYPH/log/preprocess_log");
 
     logfile << " vfile input " << std::endl;
 
-    //std::string louvain_vertex_result = "/workspaces/gen_layph/dataset/test/test-1.v";
-    std::string louvain_vertex_result = "/workspaces/gen_layph/dataset/LiveJournal/LiveJournal-undirected-3-5000_node2comm_level";
+    //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/test/test_node2comm_level";
+    std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal_node2comm_level";
+    //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002_node2comm_level";
+    //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005_node2comm_level";
 
     std::ifstream infile(louvain_vertex_result);
     vid_t v;
@@ -81,8 +86,10 @@ int main(){
     logfile << " efile input " << std::endl;
 
     // 输入边
-    //std::string edge_file = "/workspaces/gen_layph/dataset/test/test-2.e";
-    std::string edge_file = "/workspaces/gen_layph/dataset/LiveJournal/LiveJournal.e";
+    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/test/test-1.e";
+    std::string edge_file = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal.e";
+    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002.e";
+    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005.e";
     
     infile.open(edge_file);
     vid_t u;
@@ -119,7 +126,7 @@ int main(){
             comm_inner_node[vdata[i]].push_back(i); // 不是边界点就加入所在聚类的内部点集
     }
 
-    omp_set_num_threads(24);
+    omp_set_num_threads(20);
 
     logfile << "count short cuts" << std::endl;
 
@@ -129,6 +136,7 @@ int main(){
     std::vector<bool> is_active(v_num, false); // 标记节点是否已经加入active 队列
     std::queue<vid_t> active_v; // active vertex queue
 
+    std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
     #pragma omp parallel for private(reach, is_active, active_v)
     for(vdata_t i = 0; i < max_comm; ++i){ // 对每个聚类作并行
         
@@ -175,6 +183,8 @@ int main(){
         }
     }
 
+    std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+
     logfile << " set valid commuinty " << std::endl;
     
     for(vdata_t i = 0; i < max_comm; ++i){
@@ -182,7 +192,7 @@ int main(){
         //std::cout << "short cuts num of low graph " << i << " is " << short_cnt_num[i] << std::endl;
         //std::cout << "inner edges num of low graph " << i << " is " << inner_edge_comm[i] << std::endl;
 
-        if(inner_edge_comm[i] >= short_cnt_num[i]){ // 有优化效果
+        if(inner_edge_comm[i] > short_cnt_num[i]){ // 有优化效果
             valid_comm_map[i] = valid_comm_cnt; //标记为有优化效果
             valid_comm_cnt++;
         } else{
@@ -191,17 +201,31 @@ int main(){
     }
 
     logfile << "output vertex with valid comm " << std::endl;
-    //std::string two_layer_vertex_map = "/workspaces/gen_layph/dataset/test/test-1-two-layer.v";
-    std::string two_layer_vertex_map = "/workspaces/gen_layph/dataset/LiveJournal/LiveJournal-two-layer.v";
+    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/test/test-1-two-layer.v";
+    std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-two-layer.v";
+    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-two-layer.v";
+    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005-two-layer.v";
 
     std::ofstream outfile(two_layer_vertex_map);
     for(vid_t i = 0; i < v_num; ++i){
         outfile << i << " " << valid_comm_map[vdata[i]] << std::endl;
     }
-
     outfile.close();
-
-
+    
+    //std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/test/test-upgraph-node.v";
+    std::string up_graph_node = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-upgraph-node.v";
+    //std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-upgraph-node.v";
+    //std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005-upgraph-node.v";
+    outfile.open(up_graph_node);
+    for(vid_t i = 0; i < v_num; ++i){
+        if(is_bound[i] == true || valid_comm_map[vdata[i]] == -1)
+            outfile << i << " " << valid_comm_map[vdata[i]] << std::endl;
+    }
+    outfile.close();
     logfile.close();
+
+    std::chrono::duration<double> time_span = duration_cast<std::chrono::microseconds>(end - start);
+
+    std::cout << "It tooks " << time_span.count() << " ms." << std::endl;
     return 0;
 }

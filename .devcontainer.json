@@ -8,7 +8,8 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "cschlosser.doxdocgen",
         "usernamehw.errorlens",
-        "Gruntfuggly.todo-tree"
+        "Gruntfuggly.todo-tree",
+        "ms-vscode.cmake-tools"
       ]
     }
   },

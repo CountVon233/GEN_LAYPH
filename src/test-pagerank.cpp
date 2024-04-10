@@ -90,8 +90,8 @@ int main(){
 
     std::cout << 4 << std::endl;
 
-    infile.open("/workspaces/gen_layph/output/test/vertex_bound.v");
-    //infile.open("/workspaces/gen_layph/output/LiveJournal/vertex_bound.v");
+    //infile.open("/workspaces/gen_layph/output/test/vertex_bound.v");
+    infile.open("/workspaces/gen_layph/output/LiveJournal/vertex_bound.v");
     vdata_t comm_id;
     cnt_t comm_size;
     while (infile >> comm_id >> comm_size) // comm id and number of bound nodes
@@ -106,8 +106,8 @@ int main(){
 
     std::cout << 5 << std::endl;
 
-    infile.open("/workspaces/gen_layph/output/test/low_graph.e");
-    //infile.open("/workspaces/gen_layph/output/LiveJournal/low_graph.e");
+    //infile.open("/workspaces/gen_layph/output/test/low_graph.e");
+    infile.open("/workspaces/gen_layph/output/LiveJournal/low_graph.e");
     while (infile >> comm_id >> comm_size) // comm id and number of edges
     {
         for(cnt_t i = 0; i < comm_size; ++i){
@@ -120,8 +120,8 @@ int main(){
 
     std::cout << 6 << std::endl;
 
-    infile.open("/workspaces/gen_layph/output/test/up_graph.e");
-    //infile.open("/workspaces/gen_layph/output/LiveJournal/up_graph.e");
+    //infile.open("/workspaces/gen_layph/output/test/up_graph.e");
+    infile.open("/workspaces/gen_layph/output/LiveJournal/up_graph.e");
     weight_t w;
     while (infile >> u >> v >> w) // edge from u to v with weight
     {
@@ -131,8 +131,8 @@ int main(){
 
     std::cout << 7 << std::endl;
 
-    infile.open("/workspaces/gen_layph/output/test/assign_graph.e");
-    //infile.open("/workspaces/gen_layph/output/LiveJournal/assign_graph.e");
+    //infile.open("/workspaces/gen_layph/output/test/assign_graph.e");
+    infile.open("/workspaces/gen_layph/output/LiveJournal/assign_graph.e");
     while (infile >> comm_id >> comm_size) // comm id and number of edges
     {
         for(cnt_t i = 0; i < comm_size; ++i){
@@ -151,8 +151,8 @@ int main(){
     std::vector<double> value(v_num, 0.0); 
     std::vector<double> value_1(v_num, 0.0);
 
-    std:: ofstream outfile("/workspaces/gen_layph/output/test/standard_PPR");   
-    //std:: ofstream outfile("/workspaces/gen_layph/output/LiveJournal/standard_PPR_source=0"); 
+    //std:: ofstream outfile("/workspaces/gen_layph/output/test/standard_PPR");   
+    std:: ofstream outfile("/workspaces/gen_layph/output/LiveJournal/standard_PPR_source=0"); 
     
     std::fill(residue.begin(), residue.end(), 0.0);
     std::fill(next_residue.begin(), next_residue.end(), 0.0);
@@ -191,14 +191,6 @@ int main(){
             if(active_cnt == 0)
                 break;
         } 
-        // outfile << "ppr value after computing low graph is " << std::endl;
-        // for(vid_t i = 0; i < v_num; ++i)
-        //     outfile << std::fixed << std::setprecision(15) << value[i] << " ";
-        // outfile << std::endl;
-        // outfile << "residue after computing low graph is " << std::endl;
-        // for(vid_t i = 0; i < v_num; ++i)
-        //     outfile << std::fixed << std::setprecision(15) << residue[i] << " ";
-        // outfile << std::endl;
     }
 
     std::cout << 9 << std::endl;
@@ -229,14 +221,6 @@ int main(){
         if(active_cnt == 0)
             break;
     } 
-    // outfile << "ppr value after computing up graph is " << std::endl;
-    // for(vid_t i = 0; i < v_num; ++i)
-    //     outfile << std::fixed << std::setprecision(10) << value[i] << " ";
-    // outfile << std::endl;
-    // outfile << "residue after computing up graph is " << std::endl;
-    // for(vid_t i = 0; i < v_num; ++i)
-    //     outfile << std::fixed << std::setprecision(10) << residue[i] << " ";
-    // outfile << std::endl;
 
     for(vdata_t i = 0; i < max_comm; ++i){
         for(cnt_t j = 0; j < comm_bound_node[i].size(); ++j){
@@ -249,70 +233,10 @@ int main(){
         }
     }
 
-    std::cout << 10 << std::endl;
-    
-    infile.open("/workspaces/gen_layph/dataset/test/test-2.e");
-    //infile.open("/workspaces/gen_layph/dataset/LiveJournal/LiveJournal-undirected.e");
-    while (infile >> u >> v) // comm id and number of edges
-    {
-        edge_0[v].push_back(u);
-        degree_0[u]++;
-        if(u != v){
-            edge_0[u].push_back(v);
-            degree_0[v]++;
-        }
 
-    }
-    infile.close();
-
-    std::cout << 11 << std::endl;
-
-    std::fill(residue.begin(), residue.end(), 0.0);
-    std::fill(next_residue.begin(), next_residue.end(), 0.0);
-    std::fill(value_1.begin(), value_1.end(), 0.0);
-    residue[source] = 1.0;
-
-    while(1){
-        active_cnt = 0;
-        #pragma omp parallel for
-        for(vid_t i = 0; i < v_num; ++i){
-            for(cnt_t j = 0; j < edge_0[i].size(); ++j){
-                vid_t v = edge_0[i][j];
-                next_residue[i] += residue[v] * (1 - alpha) / (double)degree_0[v];
-            }
-        }
-
-        #pragma omp parallel for reduction(+ : active_cnt)
-        for(vid_t i = 0; i < v_num; ++i){
-            if(next_residue[i] > degree_0[i] * thr){
-                active_cnt = active_cnt + 1;
-            }
-            value_1[i] += residue[i] * alpha;
-            residue[i] = next_residue[i];
-            next_residue[i] = 0.0;
-        }
-
-        if(active_cnt == 0)
-            break;
-    } 
-
-    std::cout << 12 << std::endl;
-
-    outfile << "source node is " << source << " in the " << vdata[source] << "-th low graph " << std::endl;
     for(vid_t i = 0; i < v_num; ++i){
-        if(std::abs(value[i] - value_1[i]) > 1e-6)
-            outfile << " wrong on vertex " << i << " " << std::fixed << std::setprecision(15) << value[i] << " : " << value_1[i] << std::endl; 
+        outfile << i << " " << std::fixed << std::setprecision(15) << value[i] << std::endl;
     }
-    // outfile << "final ppr value is " << std::endl;
-    // for(vid_t i = 0; i < v_num; ++i){
-    //     outfile << std::fixed << std::setprecision(15) << value[i] << " ";
-    // }
-    // outfile << std::endl;
-    outfile << "-----------------------------------------------------------" << std::endl;
-
-    // for(vid_t i = 0; i < v_num; ++i){
-    //     outfile << i << " " << std::fixed << std::setprecision(15) << value_1[i] << std::endl;
-    // }
     
     outfile.close();
 
