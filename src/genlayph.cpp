@@ -80,8 +80,8 @@ int main(){
     logfile << " vfile input " << std::endl;
 
     //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/test/test-two-layer.v";
-    std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-two-layer.v";
-    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-two-layer.v";
+    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-two-layer.v";
+    std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-two-layer.v";
     //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005-two-layer.v";
 
     std::ifstream infile(two_layer_vertex_map);
@@ -110,8 +110,8 @@ int main(){
 
     // 输入边
     //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/test/test-1.e";
-    std::string edge_file = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal.e";
-    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002.e";
+    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal.e";
+    std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002.e";
     //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005.e";
 
     infile.open(edge_file);
@@ -266,8 +266,8 @@ int main(){
     
     // 输出下层图
     //std::ofstream outfile("/workspaces/GEN_LAYPH/output/test/low_graph.e");
-    std::ofstream outfile("/workspaces/GEN_LAYPH/output/LiveJournal/low_graph.e");
-    //std::ofstream outfile("/workspaces/GEN_LAYPH/output/uk2002/low_graph.e");
+    //std::ofstream outfile("/workspaces/GEN_LAYPH/output/LiveJournal/low_graph.e");
+    std::ofstream outfile("/workspaces/GEN_LAYPH/output/uk2002/low_graph.e");
     //std::ofstream outfile("/workspaces/GEN_LAYPH/output/uk2005/low_graph.e");
     for(vdata_t i = 0 ; i < max_comm; ++i){
             cnt_t size_sum = 0;
@@ -290,8 +290,8 @@ int main(){
 
     // 输出上层图
     //outfile.open("/workspaces/GEN_LAYPH/output/test/up_graph.e");
-    outfile.open("/workspaces/GEN_LAYPH/output/LiveJournal/up_graph.e");
-    //outfile.open("/workspaces/GEN_LAYPH/output/uk2002/up_graph.e");
+    //outfile.open("/workspaces/GEN_LAYPH/output/LiveJournal/up_graph.e");
+    outfile.open("/workspaces/GEN_LAYPH/output/uk2002/up_graph.e");
     //outfile.open("/workspaces/GEN_LAYPH/output/uk2005/up_graph.e");
 
     for(vid_t i = 0; i < v_num; ++i){
@@ -308,8 +308,8 @@ int main(){
     
     //输出赋值图
     //outfile.open("/workspaces/GEN_LAYPH/output/test/assign_graph.e");
-    outfile.open("/workspaces/GEN_LAYPH/output/LiveJournal/assign_graph.e");
-    //outfile.open("/workspaces/GEN_LAYPH/output/uk2002/assign_graph.e");
+    //outfile.open("/workspaces/GEN_LAYPH/output/LiveJournal/assign_graph.e");
+    outfile.open("/workspaces/GEN_LAYPH/output/uk2002/assign_graph.e");
     //outfile.open("/workspaces/GEN_LAYPH/output/uk2005/assign_graph.e");
     for(vdata_t i = 0 ; i < max_comm; ++i){
             cnt_t size = 0;
@@ -331,8 +331,8 @@ int main(){
   
     // 输出点所在图（ 上层图（本身就在上层图的点 + 下层图的边界点），下层图（内部点））
     //outfile.open("/workspaces/GEN_LAYPH/output/test/vertex_map.v");
-    outfile.open("/workspaces/GEN_LAYPH/output/LiveJournal/vertex_map.v");
-    //outfile.open("/workspaces/GEN_LAYPH/output/uk2002/vertex_map.v");
+    //outfile.open("/workspaces/GEN_LAYPH/output/LiveJournal/vertex_map.v");
+    outfile.open("/workspaces/GEN_LAYPH/output/uk2002/vertex_map.v");
     //outfile.open("/workspaces/GEN_LAYPH/output/uk2005/vertex_map.v");
     for(vdata_t i = 0 ; i < v_num; ++i){
         if(vdata[i] != -1 && is_bound[i])

@@ -57,8 +57,8 @@ int main(){
     logfile << " vfile input " << std::endl;
 
     //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/test/test_node2comm_level";
-    std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal_node2comm_level";
-    //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002_node2comm_level";
+    //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal_node2comm_level";
+    std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002_node2comm_level";
     //std::string louvain_vertex_result = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005_node2comm_level";
 
     std::ifstream infile(louvain_vertex_result);
@@ -87,8 +87,8 @@ int main(){
 
     // 输入边
     //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/test/test-1.e";
-    std::string edge_file = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal.e";
-    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002.e";
+    //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal.e";
+    std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002.e";
     //std::string edge_file = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005.e";
     
     infile.open(edge_file);
@@ -202,8 +202,8 @@ int main(){
 
     logfile << "output vertex with valid comm " << std::endl;
     //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/test/test-1-two-layer.v";
-    std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-two-layer.v";
-    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-two-layer.v";
+    //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-two-layer.v";
+    std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-two-layer.v";
     //std::string two_layer_vertex_map = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005-two-layer.v";
 
     std::ofstream outfile(two_layer_vertex_map);
@@ -213,8 +213,8 @@ int main(){
     outfile.close();
     
     //std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/test/test-upgraph-node.v";
-    std::string up_graph_node = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-upgraph-node.v";
-    //std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-upgraph-node.v";
+    //std::string up_graph_node = "/workspaces/GEN_LAYPH/dataset/LiveJournal/LiveJournal-upgraph-node.v";
+    std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/uk2002/uk2002-upgraph-node.v";
     //std::string up_graph_node  = "/workspaces/GEN_LAYPH/dataset/uk2005/uk2005-upgraph-node.v";
     outfile.open(up_graph_node);
     for(vid_t i = 0; i < v_num; ++i){
